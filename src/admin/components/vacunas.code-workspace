@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "../../.."
+		},
+		{
+			"path": "../../../../../Kruger Star/PokeAPI Challenge/back"
+		}
+	],
+	"settings": {
+		"workbench.colorCustomizations": {
+			"activityBar.background": "#3E2909",
+			"titleBar.activeBackground": "#573A0D",
+			"titleBar.activeForeground": "#FEFAF6"
+		}
+	}
+}
