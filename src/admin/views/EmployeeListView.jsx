@@ -1,4 +1,4 @@
-import { TextField, Toolbar} from '@mui/material';
+import { Grid, TextField, Toolbar } from '@mui/material';
 
 import { EmployeeForm } from '../components';
 import useUserService from '../../hooks/useUserService';
@@ -32,12 +32,15 @@ const SelectFilter = ({ config }) => {
       .then((data) => {
         config.setUsers(data);
       })
-      
+
   };
 
   return (
     <Box sx={{ minWidth: 180 }}>
-      <FormControl fullWidth>
+      <FormControl fullWidth
+        style={{
+          margin: 10,
+        }}>
         <InputLabel id="demo-simple-select-label">{config.label}</InputLabel>
         <Select
           labelId="demo-simple-select-label"
@@ -69,15 +72,7 @@ export const EmployeeListView = () => {
 
 
   useEffect(() => {
-    setLoading(true);
-    getUsers('', startedDate, endedDate)
-      .then((data) => {
-        setUsers(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setLoading(false);
-      });
+    loadUsers();
   }, []);
 
 
@@ -86,11 +81,9 @@ export const EmployeeListView = () => {
   };
 
   const deleteRow = (row) => {
-    console.log('delete', row);
     deleteUser(row.id)
       .then(user => {
-        console.log(user);
-        setUsers(users.filter(u => u.id !== row.id));
+        setUsers(users.filter(u => u.id !== user.id));
       })
       .catch(e => {
         messageService.error(e);
@@ -101,22 +94,19 @@ export const EmployeeListView = () => {
     setSelectedRow(row);
   }
 
-  const handleDateChange = (newValue, dateType) => {
-    if (dateType === 'startedDate') {
-      setStartedDate(newValue);
-      console.log('startedDatexx', startedDate);
-    } else {
-      setEndedDate(newValue);
-      console.log('endedDate', endedDate);
-    }
-    getUsers('', startedDate, endedDate)
+  const loadUsers = (search = '', startedDate = '', endedDate = '') => {
+    setLoading(true);
+    getUsers(search, startedDate, endedDate)
       .then((data) => {
         setUsers(data);
+        setLoading(false);
       })
       .catch((error) => {
-        console.log(error);
+        setLoading(false);
       });
-  };
+  }
+
+
 
   if (loading) return <div>Cargando...</div>;
 
@@ -129,7 +119,7 @@ export const EmployeeListView = () => {
           justifyContent: 'end',
           gap: 1
         }}>
-        <Toolbar>
+        <Grid container direction='row' justifyContent='space-between' alignItems='center'>
           <EmployeeForm employee={selectedRow}
             open={open}
             setOpen={setOpen}
@@ -194,7 +184,7 @@ export const EmployeeListView = () => {
                 users: users,
                 setUsers: setUsers
               }} />
-        </Toolbar>
+        </Grid>
       </Box>
 
       <Table sx={{ minWidth: 650 }} aria-label="simple table">

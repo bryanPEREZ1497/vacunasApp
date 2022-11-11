@@ -1,5 +1,5 @@
 import { AppBar, Grid, IconButton, Toolbar, Typography } from '@mui/material';
-import { LogoutOutlined, MenuOutlined } from '@mui/icons-material';
+import { LogoutOutlined } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import useAuthService from '../../hooks/useAuthService';
 
@@ -19,13 +19,6 @@ export const NavBar = () => {
             position='fixed'
         >
             <Toolbar>
-                <IconButton
-                    color='inherit'
-                    edge="start"
-                    sx={{ mr: 2, display: { sm: 'none' } }}
-                >
-                    <MenuOutlined />
-                </IconButton>
 
                 <Grid container direction='row' justifyContent='space-between' alignItems='center'>
                     <Typography variant='h6' noWrap component='div'> Vacunas </Typography>

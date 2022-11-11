@@ -6,6 +6,7 @@ import CardContent from '@mui/material/CardContent';
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 import { setLocale } from 'yup';
 import useUserService from '../../hooks/useUserService';
@@ -103,7 +104,9 @@ export const EmployeeForm = ({ open, setOpen, employee = null, setUsers, users, 
 
     return (
         <>
-            <Button onClick={handleOpen}>Nuevo Empleado</Button>
+            <Button onClick={handleOpen}>
+                <AddCircleIcon />
+                Nuevo Empleado</Button>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -118,7 +121,7 @@ export const EmployeeForm = ({ open, setOpen, employee = null, setUsers, users, 
                     width: 400,
 
                 }}>
-                    <CardHeader title="Nuevo Empleado" />
+                    <CardHeader title={employee ? 'Editar' : 'Crear'} />
                     <CardContent>
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <Grid container>

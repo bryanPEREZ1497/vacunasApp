@@ -1,5 +1,5 @@
 import { AppBar, Grid, IconButton, Toolbar, Typography } from '@mui/material';
-import { LogoutOutlined, MenuOutlined } from '@mui/icons-material';
+import { LogoutOutlined } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
 

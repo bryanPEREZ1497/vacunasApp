@@ -33,7 +33,6 @@ export const InfoView = () => {
         birthdate: ' ',
         address: ' ',
         phone: ' ',
-        password: ' ',
         username: ' ',
     }
     const { register, handleSubmit, formState: { errors }, setValue, reset } = useForm({
@@ -191,23 +190,6 @@ export const InfoView = () => {
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                label="Contraseña"
-                                type="password"
-                                placeholder='1724034184'
-                                fullWidth
-                                {...register("password")}
-                                aria-invalid={errors.password ? "true" : "false"}
-                            />
-                            {errors.password?.message &&
-                                <Typography>
-                                    {errors.password?.message}
-                                </Typography>
-                            }
-                        </Grid>
-                    </Grid>
-                    <Grid container spacing={2} sx={{ mb: 2, mt: 1 }}>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
                                 label="Usuario"
                                 type="string"
                                 placeholder='ban@gmail.com'
@@ -221,10 +203,7 @@ export const InfoView = () => {
                                 </Typography>
                             }
                         </Grid>
-
                     </Grid>
-
-
 
                     <Grid item xs={12} sx={{ mt: 2 }}>
                         <Button

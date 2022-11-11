@@ -62,7 +62,6 @@ export const VaccineView = () => {
 
 
     const onSubmit = (data) => {
-        console.log(data);
         editUser(data)
             .then(res => {
                 messageService.success('Información actualizada');
@@ -77,7 +76,6 @@ export const VaccineView = () => {
     };
 
     const handleType = (event) => {
-        console.log('type', event.target.value);
         setType(event.target.value);
         setValue('vaccineType', event.target.value);
 
