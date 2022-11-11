@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { SaveOutlined } from '@mui/icons-material';
 import { Button, Card, CardContent, CardHeader, Grid, TextField, Typography } from '@mui/material';
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
@@ -48,8 +47,6 @@ export const InfoView = () => {
     useEffect(() => {
         getUser(loggedUser().id)
             .then(res => {
-                console.log('res', res)
-                console.log('res', res.bi)
                 for (const key in res) {
                     setValue(key, res[key]);
                 }
@@ -60,17 +57,9 @@ export const InfoView = () => {
             });
     }, []);
 
-    // useEffect(() => {
-    //     console.log(date);
-    //     setValue('birthdate', date);
-    //     console.log()
-    // }, [date]);
-
     const onSubmit = (user) => {
-        console.log('mybirthdate', user.birthdate);
         editUser(user)
             .then(user => {
-                console.log(user);
                 messageService.success('Usuario actualizado');
                 for (const key in user) {
                     setValue(key, user[key]);
@@ -103,19 +92,7 @@ export const InfoView = () => {
                             }
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            {/* <TextField
-                                label="Fecha de Nacimiento"
-                                type="date"
-                                placeholder='Fecha de Nacimiento'
-                                fullWidth
-                                {...register("birthdate")}
-                                aria-invalid={errors.birthdate ? "true" : "false"}
-                            />
-                            {errors.birthdate?.message &&
-                                <Typography>
-                                    {errors.birthdate?.message}
-                                </Typography>
-                            } */}
+                            
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
                                     label="Fecha de Nacimiento"

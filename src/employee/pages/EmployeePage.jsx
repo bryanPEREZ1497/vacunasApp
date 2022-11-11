@@ -1,6 +1,3 @@
-import { IconButton } from '@mui/material';
-import { AddOutlined } from '@mui/icons-material';
-
 import { EmployeeLayout } from '../layout/EmployeeLayout';
 import { InfoView, VaccineView } from '../views';
 

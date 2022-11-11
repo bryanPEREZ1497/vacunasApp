@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { SaveOutlined } from '@mui/icons-material';
 import { Button, Card, CardContent, CardHeader, FormControlLabel, Grid, TextField, Typography } from '@mui/material';
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
@@ -8,7 +7,6 @@ import { messageService } from '../../services/messageService';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -85,37 +83,6 @@ export const VaccineView = () => {
 
     };
 
-    //if switch is on, show vaccine info
-    // const showVaccineInfo = () => {
-    //     if (type === 'true') {
-    //         return (
-    //             <Grid container spacing={2}>
-    //                 <Grid item xs={12} sm={6}>
-    //                     <FormControl fullWidth>
-    //                         <InputLabel id="vaccineType">Tipo de vacuna</InputLabel>
-    //                         <Select
-    //                             labelId="vaccineType"
-    //                             id="vaccineType"
-    //                             value={type}
-    //                             label="Tipo de vacuna"
-    //                             {...register('vaccineType')}
-    //                         >
-    //                             <MenuItem value={'Pfizer'}>Pfizer</MenuItem>
-    //                             <MenuItem value={'Moderna'}>Moderna</MenuItem>
-    //                             <MenuItem value={'AstraZeneca'}>AstraZeneca</MenuItem>
-    //                             <MenuItem value={'Sputnik V'}>Sputnik V</MenuItem>
-    //                             <MenuItem value={'Sinopharm'}>Sinopharm</MenuItem>
-    //                             <MenuItem value={'Sinovac'}>Sinovac</MenuItem>
-    //                             <MenuItem value={'Janssen'}>Janssen</MenuItem>
-    //                         </Select>
-    //                     </FormControl>
-    //                 </Grid>
-    //             </Grid>
-    //         )
-    //     }
-    // }
-
-    const label = { inputProps: { 'aria-label': 'Switch demo' } };
     return (
         <Card>
             <CardHeader title="Vacunación" />

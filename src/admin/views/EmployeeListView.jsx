@@ -1,7 +1,5 @@
-import { Grid, TextField, Toolbar, Typography } from '@mui/material';
-import { StarOutline } from '@mui/icons-material';
+import { TextField, Toolbar} from '@mui/material';
 
-import employees from '../../mock/employees.json';
 import { EmployeeForm } from '../components';
 import useUserService from '../../hooks/useUserService';
 import { useEffect, useState } from 'react';
@@ -12,7 +10,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import InfoIcon from '@mui/icons-material/Info';
 import EditIcon from '@mui/icons-material/Edit';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
@@ -27,18 +24,15 @@ import { messageService } from '../../services/messageService';
 
 
 const SelectFilter = ({ config }) => {
-  // const [selectedOption, setSelectedOption] = useState('');
-  const { getUsers, deleteUser } = useUserService();
+  const { getUsers } = useUserService();
 
   const handleChange = (event) => {
     config.setValue(event.target.value);
     getUsers(event.target.value)
       .then((data) => {
         config.setUsers(data);
-        // setLoading(false);
       })
-      .catch((error) => {
-      });
+      
   };
 
   return (
@@ -108,7 +102,6 @@ export const EmployeeListView = () => {
   }
 
   const handleDateChange = (newValue, dateType) => {
-    const date = `${newValue.$y}-${newValue.$M + 1}-${newValue.$D}`;
     if (dateType === 'startedDate') {
       setStartedDate(newValue);
       console.log('startedDatexx', startedDate);
@@ -149,7 +142,6 @@ export const EmployeeListView = () => {
               label="Fecha inicial Vacunación"
               name="startedDate"
               value={startedDate}
-              // onChange={(newValue) => handleDateChange(newValue, 'startedDate')}
               onChange={(newValue) => {
                 setStartedDate(newValue)
                 getUsers('', newValue, endedDate)
@@ -168,7 +160,6 @@ export const EmployeeListView = () => {
               label="Fecha final Vacunación"
               name="endedDate"
               value={endedDate}
-              // onChange={(newValue) => handleDateChange(newValue, 'endedDate')}
               onChange={(newValue) => {
                 setEndedDate(newValue)
                 getUsers('', startedDate, newValue)
@@ -225,9 +216,6 @@ export const EmployeeListView = () => {
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               onClick={() => selectRow(row)}
             >
-              {/* <TableCell component="th" scope="row">
-                {row.id}
-              </TableCell> */}
               <TableCell align="right">{row.cedula}</TableCell>
               <TableCell align="right">{row.names}</TableCell>
               <TableCell align="right">{row.lastnames}</TableCell>
@@ -245,30 +233,3 @@ export const EmployeeListView = () => {
     </TableContainer>
   );
 }
-
-// return (
-  //   <Grid
-  //     container
-  //     spacing={0}
-  //     direction="column"
-  //     alignItems="center"
-  //     justifyContent="center"
-  //     sx={{ minHeight: 'calc(100vh - 210px)', backgroundColor: 'primary.admin', borderRadius: 3 }}
-  //   >
-  //     <Typography>Employee List</Typography>
-
-  //     <div style={{ height: 400, width: '100%' }}>
-  //       <DataGrid
-  //         rows={users}
-  //         columns={columns}
-  //         pageSize={5}
-  //         rowsPerPageOptions={[5]}
-  //         checkboxSelection
-  //         components={{
-  //           Toolbar: CustomToolbar,
-  //         }}
-
-  //       />
-  //     </div>
-  //   </Grid>
-  // )

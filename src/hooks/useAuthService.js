@@ -15,7 +15,7 @@ export default function useAuthService() {
 
         try {
             const response = await instance.post(`${resourceUrl}/login`, payload);
-            // setToken(response.data.token);
+            setToken(response.data.token);
             setUser(response.data.data);
             return response.data.data;
         } catch (error) {
@@ -59,6 +59,7 @@ export default function useAuthService() {
     return {
         login,
         logout,
-        getUser
+        getUser,
+        getToken
     }
 }

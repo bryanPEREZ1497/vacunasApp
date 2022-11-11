@@ -30,7 +30,7 @@ export const LoginPage = () => {
         navigate("/employee");
       }
     } catch (error) {
-      messageService.error(error.message);
+      messageService.error(error.response.data.message);
     }
   };
 

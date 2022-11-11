@@ -3,7 +3,6 @@ import { AdminRoutes } from '../admin/routes/AdminRoutes';
 
 import { AuthRoutes } from '../auth/routes/AuthRoutes';
 import { EmployeeRoutes } from '../employee/routes/EmployeeRoutes';
-import { JournalRoutes } from '../journal/routes/JournalRoutes';
 
 
 export const AppRouter = () => {

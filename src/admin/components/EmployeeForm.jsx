@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Modal from '@mui/material/Modal';
-import { Button, CardHeader, Grid, Link, TextField, Typography } from '@mui/material';
+import { Button, CardHeader, Grid, TextField, Typography } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { useForm } from "react-hook-form";
@@ -51,7 +51,6 @@ export const EmployeeForm = ({ open, setOpen, employee = null, setUsers, users, 
     const { storeUser, editUser } = useUserService();
 
     useEffect(() => {
-        console.log(typeof employee);
         if (employee) {
             for (const key in defaultValues) {
                 setValue(key, defaultValues[key]);
@@ -69,9 +68,9 @@ export const EmployeeForm = ({ open, setOpen, employee = null, setUsers, users, 
                     handleClose();
                     messageService.success('Usuario actualizado con éxito')
                 })
-                .catch(e => {
-                    console.log(e);
-                });
+                .catch(err => {
+                    messageService.error(err);
+                })
         } else {
 
             const repeatedCedula = users.find(user => user.cedula === data.cedula);
@@ -203,16 +202,3 @@ export const EmployeeForm = ({ open, setOpen, employee = null, setUsers, users, 
         </>
     );
 }
-
-
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-};

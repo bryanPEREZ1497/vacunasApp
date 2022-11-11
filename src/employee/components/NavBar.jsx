@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import useAuthService from '../../hooks/useAuthService';
 
 
-export const NavBar = ({ drawerWidth = 0 }) => {
+export const NavBar = () => {
     const navigate = useNavigate();
     const { logout } = useAuthService();
 
@@ -17,10 +17,6 @@ export const NavBar = ({ drawerWidth = 0 }) => {
     return (
         <AppBar
             position='fixed'
-            sx={{
-                width: { sm: `calc(100% - ${drawerWidth}px)` },
-                ml: { sm: `${drawerWidth}px` }
-            }}
         >
             <Toolbar>
                 <IconButton
