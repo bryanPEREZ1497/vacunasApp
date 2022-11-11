@@ -13,18 +13,13 @@ export const AppRouter = () => {
         {/* Login y Registro */}
         <Route path="/auth/*" element={ <AuthRoutes /> } />
 
-        {/* JournalApp */}
-        <Route path="/journal/*" element={ <JournalRoutes /> } />
-        
         {/* Admin */}
         <Route path="/admin/*" element={ <AdminRoutes /> } />
         
         {/* Employee */}
         <Route path="/employee/*" element={ <EmployeeRoutes /> } />
         
-        <Route path="/*" element={ <AdminRoutes /> } />
-
-
+        <Route path="/*" element={ <AuthRoutes /> } />
 
     </Routes>
   )

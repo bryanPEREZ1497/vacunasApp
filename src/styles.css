@@ -3,3 +3,7 @@
 .box-shadow {
     box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
 }
+
+.swal2-container {
+    z-index: 10000 !important;
+}

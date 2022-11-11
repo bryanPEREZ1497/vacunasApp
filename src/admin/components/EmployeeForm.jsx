@@ -14,6 +14,8 @@ import { messageService } from '../../services/messageService';
 setLocale({
     string: {
         email: 'Debe ser un email válido',
+        matches: 'Solo se permiten letras',
+        required: 'Este campo es requerido',
     },
     number: {
         min: 'Debe ser mayor a ${min}',
@@ -21,11 +23,16 @@ setLocale({
     },
 });
 
+const namesRegex = /^[a-zA-Z\s]*$/;
+const numbersRegex = /^[0-9]*$/;
+
 const employeeSchema = yup.object().shape({
     id: yup.string(),
-    cedula: yup.string().min(10).max(10).required(),
-    names: yup.string().required(),
-    lastnames: yup.string().required(),
+    cedula: yup.string().min(10).max(10)
+        .matches(numbersRegex, 'Solo se permiten números')
+        .required(),
+    names: yup.string().matches(namesRegex).required(),
+    lastnames: yup.string().matches(namesRegex).required(),
     email: yup.string().email().required(),
 }).required();
 
@@ -55,6 +62,7 @@ export const EmployeeForm = ({ open, setOpen, employee = null, setUsers, users, 
 
     const onSubmit = (data) => {
         if (employee?.id) {
+
             editUser(data)
                 .then(user => {
                     setUsers(users.map(u => u.id === user.id ? user : u));
@@ -65,6 +73,12 @@ export const EmployeeForm = ({ open, setOpen, employee = null, setUsers, users, 
                     console.log(e);
                 });
         } else {
+
+            const repeatedCedula = users.find(user => user.cedula === data.cedula);
+            if (repeatedCedula) {
+                messageService.error('Ya existe un usuario con esa cédula');
+                return;
+            }
 
             data.username = data.email;
             data.password = data.cedula;
@@ -136,7 +150,7 @@ export const EmployeeForm = ({ open, setOpen, employee = null, setUsers, users, 
                                     />
                                     {errors.names?.message &&
                                         <Typography>
-                                            Campo requerido
+                                            {errors.names?.message}
 
                                         </Typography>
                                     }
@@ -152,7 +166,7 @@ export const EmployeeForm = ({ open, setOpen, employee = null, setUsers, users, 
                                     />
                                     {errors.lastnames?.message &&
                                         <Typography>
-                                            Campo requerido
+                                            {errors.lastnames?.message}
 
                                         </Typography>
                                     }
