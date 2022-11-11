@@ -8,9 +8,9 @@ export const EmployeePage = () => {
   return (
     <EmployeeLayout>
       
-      {/* <InfoView /> */}
+      <InfoView />
       <br />
-      <VaccineView />
+      {/* <VaccineView /> */}
       
     </EmployeeLayout>
   )

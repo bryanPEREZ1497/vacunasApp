@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import axios from 'axios';
 
-const api = 'https://636afe6fb10125b78fe8fabb.mockapi.io/api/v1';
+const api = 'http://localhost:4000/api/v1';
 
 export default function useAxiosInstance() {
 

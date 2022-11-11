@@ -1,12 +1,6 @@
 import { Grid, TextField, Typography } from '@mui/material';
 import { StarOutline } from '@mui/icons-material';
-import {
-  DataGrid, GridToolbar, GridToolbarContainer,
-  GridToolbarColumnsButton,
-  GridToolbarFilterButton,
-  GridToolbarExport,
-  GridToolbarDensitySelector,
-} from '@mui/x-data-grid';
+
 import employees from '../../mock/employees.json';
 import { EmployeeForm } from '../components';
 import useUserService from '../../hooks/useUserService';
@@ -26,13 +20,16 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 
 const SelectFilter = ({ config }) => {
-  const [selectedOption, setSelectedOption] = useState('');
+  // const [selectedOption, setSelectedOption] = useState('');
 
   const handleChange = (event) => {
-    setSelectedOption(event.target.value);
+    config.setValue(event.target.value);
   };
 
   return (
@@ -42,7 +39,7 @@ const SelectFilter = ({ config }) => {
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={selectedOption}
+          value={config.value}
           label={config.label}
           onChange={handleChange}
         >
@@ -62,10 +59,14 @@ export const EmployeeListView = () => {
   const [selectedRow, setSelectedRow] = useState();
   const [open, setOpen] = useState(false);
 
+  const [date, setDate] = useState();
+  const [state, setState] = useState();
+  const [type, setType] = useState();
+
 
   useEffect(() => {
     setLoading(true);
-    getUsers()
+    getUsers(type, state, date)
       .then((data) => {
         setUsers(data);
         setLoading(false);
@@ -73,7 +74,7 @@ export const EmployeeListView = () => {
       .catch((error) => {
         setLoading(false);
       });
-  }, []);
+  }, [type, state, date]);
 
 
   const editRow = (row) => {
@@ -108,18 +109,26 @@ export const EmployeeListView = () => {
           gap: 1
         }}>
 
-        <EmployeeForm employee={selectedRow} open={open} setOpen={setOpen} setUsers={setUsers} users={users} setSelectedRow={setSelectedRow} />
-        <TextField
-          label="Fecha de vacunación"
-          type="date"
-          placeholder='17/11/2021'
+        <EmployeeForm employee={selectedRow}
+          open={open}
+          setOpen={setOpen}
+          setUsers={setUsers}
+          users={users}
+          setSelectedRow={setSelectedRow} />
 
-        // {...register("cedula")}
-        // aria-invalid={errors.cedula ? "true" : "false"}
-        />
+        {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            label="Basic example"
+            value={date}
+            onChange={(newValue) => {
+              setDate(newValue);
+            }}
+            renderInput={(params) => <TextField {...params} />}
+          />
+        </LocalizationProvider> */}
 
-        <SelectFilter config={{ data: ['Vacunado', 'No vacunado'], label: 'Estado de vacunación' }} />
-        <SelectFilter config={{ data: ['Sputnik', 'AstraZeneca', 'Pfizer', 'Jhonson&Jhonson'], label: 'Tipo Vacuna' }} />
+        <SelectFilter config={{ data: ['Vacunado', 'No vacunado'], label: 'Estado de vacunación', value: state, setValue: setState }} />
+        <SelectFilter config={{ data: ['Sputnik', 'AstraZeneca', 'Pfizer', 'Jhonson&Jhonson'], label: 'Tipo Vacuna', value: type, setValue: setType }} />
       </Box>
 
       <Table sx={{ minWidth: 650 }} aria-label="simple table">

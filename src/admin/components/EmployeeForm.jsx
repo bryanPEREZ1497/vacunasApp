@@ -44,6 +44,7 @@ export const EmployeeForm = ({ open, setOpen, employee = null, setUsers, users, 
     const { storeUser, editUser } = useUserService();
 
     useEffect(() => {
+        console.log(typeof employee);
         if (employee) {
             for (const key in defaultValues) {
                 setValue(key, defaultValues[key]);
@@ -68,7 +69,7 @@ export const EmployeeForm = ({ open, setOpen, employee = null, setUsers, users, 
             data.username = data.email;
             data.password = data.cedula;
             data.isVaccinated = false;
-            data.role = 'ROLE_USER';
+            data.role = 'Employee';
 
             storeUser(data)
                 .then((response) => {
