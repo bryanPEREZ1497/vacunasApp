@@ -3,8 +3,9 @@ import axios from 'axios';
 import useAuthService from './useAuthService';
 import { messageService } from '../services/messageService';
 
-const api = 'http://localhost:4000/api/v1';
+const api = 'https://pokeapi-expressjs.herokuapp.com/api/v1';
 
+const { getToken } = useAuthService();
 export default function useAxiosInstance() {
 
     const instance = axios.create({
@@ -15,28 +16,13 @@ export default function useAxiosInstance() {
         },
     });
 
-    // instance.interceptors.request.use(function (config) {
-    //     config.headers['Authorization'] = `Bearer ${getToken()}`;
-    //     return config;
-    // }, function (error) {
-    //     messageService.error(error);
-    //     return Promise.reject(error);
-    // });
-
-    // instance.interceptors.response.use(function (response) {
-    //     return response;
-    // }, function (error) {
-    //     if ((error.request.status === 403 || error.request.status === 401 || error.request.status === 423)) {
-    //         // messageService.error('Su sesión ha expirado');
-    //         // logOut();
-    //         // cleanState()
-    //     }
-    //     if ((error.request.status >= 500)) {
-    //         // messageService.error('Error del servidor');
-    //     }
-    //     return Promise.reject(error);
-    // });
-
+    instance.interceptors.request.use(function (config) {
+        config.headers['Authorization'] = `Bearer ${getToken()}`;
+        return config;
+    }, function (error) {
+        messageService.error(error);
+        return Promise.reject(error);
+    });
 
     return {
         instance
