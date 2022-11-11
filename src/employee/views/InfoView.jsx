@@ -48,11 +48,9 @@ export const InfoView = () => {
     useEffect(() => {
         getUser(loggedUser().id)
             .then(res => {
-                // setUser(res);
                 console.log('res', res)
                 console.log('res', res.bi)
                 for (const key in res) {
-                    // console.log(key);
                     setValue(key, res[key]);
                 }
                 res.birthdate && setDate(res.birthdate);
@@ -60,9 +58,6 @@ export const InfoView = () => {
             .catch(err => {
                 messageService.error(err);
             });
-        return () => {
-            // setUser(null);
-        }
     }, []);
 
     // useEffect(() => {

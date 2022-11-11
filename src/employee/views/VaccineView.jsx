@@ -26,22 +26,35 @@ const employeeSchema = yup.object().shape({
 }).required();
 
 export const VaccineView = () => {
+    const defaultValues = {
+        id: ' ',
+        isVaccinated: false,
+        vaccineType: ' ',
+        vaccineDate: ' ',
+        doseNumber: 0,
+    }
     const { register, handleSubmit, formState: { errors }, setValue, reset } = useForm({
         resolver: yupResolver(employeeSchema),
+        defaultValues
     });
     const [type, setType] = useState('');
+    const [date, setDate] = useState('');
+    const [state, setState] = useState(false);
 
 
     const { getUser, editUser } = useUserService();
-    const { getUser: user } = useAuthService();
+
+    const { getUser: loggedUser } = useAuthService();
 
     useEffect(() => {
-        getUser(user().id)
+        getUser(loggedUser().id)
             .then(user => {
-                console.log(user);
                 for (const key in user) {
                     setValue(key, user[key]);
                 }
+                user.vaccineDate && setDate(user.vaccineDate);
+                setState(user.isVaccinated);
+                user.vaccineType && setType(user.vaccineType);
             })
             .catch(err => {
                 messageService.error(err);
@@ -65,8 +78,11 @@ export const VaccineView = () => {
             );
     };
 
-    const handleChange = (event) => {
+    const handleType = (event) => {
+        console.log('type', event.target.value);
         setType(event.target.value);
+        setValue('vaccineType', event.target.value);
+
     };
 
     //if switch is on, show vaccine info
@@ -108,30 +124,11 @@ export const VaccineView = () => {
                     <Grid container>
                         <Grid container spacing={2} sx={{ mb: 2, mt: 1 }}>
                             <Grid item xs={12} sm={6}>
-                                {/* <TextField
-                                    label="Estado de Vacunación"
-                                    type="string"
-                                    placeholder='1724034184'
-                                    fullWidth
-                                    {...register("state")}
-                                    aria-invalid={errors.state ? "true" : "false"}
-                                />
-                                {errors.state?.message &&
-                                    <Typography>
-                                        {errors.state?.message}
-                                    </Typography>
-                                } */}
-                                {/* <Switch {...label}
-                                    {...register("state")}
-                                    aria-invalid={errors.state ? "true" : "false"}
-                                /> */}
-                                {/* {errors.state?.message &&
-                                    <Typography>
-                                        {errors.state?.message}
-                                    </Typography>
-                                } */}
                                 <FormControlLabel
-                                    control={<Switch />}
+                                    control={<Switch
+                                        checked={state}
+                                        onChange={() => setState(!state)}
+                                        inputProps={{ 'aria-label': 'controlled' }} />}
                                     label="¿Está vacunado?"
                                     {...register("isVaccinated")}
                                     aria-invalid={errors.isVaccinated ? "true" : "false"} />
@@ -141,114 +138,61 @@ export const VaccineView = () => {
                                     </Typography>
                                 }
                             </Grid>
-                            <Grid item xs={12} sm={6}>
-                                {/* <TextField
-                                    label="Tipo de Vacuna"
-                                    type="string"
-                                    placeholder='1724034184'
-                                    fullWidth
-                                    {...register("type")}
-                                    aria-invalid={errors.type ? "true" : "false"}
-                                />
-                                {errors.type?.message &&
-                                    <Typography>
-                                        {errors.type?.message}
-                                    </Typography>
-                                } */}
-                                <Box sx={{ minWidth: 120 }}>
-                                    <TextField
-                                        label="Tipo de Vacuna"
-                                        select
-                                        placeholder='Pfizer'
-                                        fullWidth
-                                        {...register("vaccineType")}
-                                        aria-invalid={errors.vaccineType ? "true" : "false"}
-                                    >
-                                        {['Sputnik', 'AstraZeneca', 'Pfizer', 'Jhonson&Jhonson'].map((item, index) => (
-                                            <MenuItem key={index} value={item}>{item}</MenuItem>
-                                        ))}
-
-                                    </TextField >
-                                    {errors.vaccineType?.message &&
-                                        <Typography>
-                                            {errors.vaccineType?.message}
-                                        </Typography>
-                                    }
-                                    {/* <FormControl fullWidth>
-                                        <InputLabel id="demo-simple-select-label">Tipo de Vacuna</InputLabel>
+                            {state === true &&
+                                <Grid item xs={12} sm={6}>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="type-label">Tipo de Vacuna</InputLabel>
                                         <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            value={employeeSchema.vaccineType}
+                                            labelId="type-label"
+                                            id="type-select"
+                                            value={type}
                                             label="Tipo de Vacuna"
-                                            // onChange={handleChange}
-                                            {...register("vaccineType")}
-                                            aria-invalid={errors.vaccineType ? "true" : "false"}
+
+                                            onChange={handleType}
+                                            defaultValue={type}
                                         >
-                                            {['Sputnik', 'AstraZeneca', 'Pfizer', 'Jhonson&Jhonson'].map((item, index) => (
+                                            {['', 'Sputnik', 'AstraZeneca', 'Pfizer', 'Jhonson&Jhonson'].map((item, index) => (
                                                 <MenuItem key={index} value={item}>{item}</MenuItem>
                                             ))}
                                         </Select>
-                                    </FormControl> */}
-                                </Box>
-                                {errors.vaccineType?.message &&
-                                    <Typography>
-                                        {errors.vaccineType?.message}
-                                    </Typography>
-                                }
-
-                            </Grid>
+                                    </FormControl>
+                                </Grid>
+                            }
                         </Grid>
-                        <Grid container spacing={2} sx={{ mb: 2, mt: 1 }}>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    label="Fecha"
-                                    type="date"
-                                    placeholder='1724034184'
-                                    fullWidth
-                                    {...register("vaccineDate")}
-                                    aria-invalid={errors.vaccineDate ? "true" : "false"}
-                                />
-                                {errors.vaccineDate?.message &&
-                                    <Typography>
-                                        {errors.vaccineDate?.message}
-                                    </Typography>
-                                }
-                                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DatePicker
-                                        label="Fecha de Nacimiento"
-                                        // value={value}
-                                        // onChange={(newValue) => {
-                                        //     setValue(newValue);
-                                        // }}
-                                        {...register("birthdate")}
-                                        aria-invalid={errors.birthdate ? "true" : "false"}
-                                        renderInput={(params) => <TextField {...params} />}
+                        {state === true &&
+
+                            <Grid container spacing={2} sx={{ mb: 2, mt: 1 }}>
+                                <Grid item xs={12} sm={6}>
+
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DatePicker
+                                            label="Fecha"
+                                            value={date}
+                                            onChange={(newValue) => {
+                                                setDate(newValue);
+                                                setValue('vaccineDate', newValue);
+                                            }}
+                                            renderInput={(params) => <TextField {...params} />}
+                                        />
+                                    </LocalizationProvider>
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        label="Número de Dosis"
+                                        type="number"
+                                        placeholder='1724034184'
+                                        fullWidth
+                                        {...register("doseNumber")}
+                                        aria-invalid={errors.doseNumber ? "true" : "false"}
                                     />
-                                </LocalizationProvider>
-                                {errors.birthdate?.message &&
-                                    <Typography>
-                                        {errors.birthdate?.message}
-                                    </Typography>
-                                } */}
+                                    {errors.doseNumber?.message &&
+                                        <Typography>
+                                            {errors.doseNumber?.message}
+                                        </Typography>
+                                    }
+                                </Grid>
                             </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    label="Número de Dosis"
-                                    type="number"
-                                    placeholder='1724034184'
-                                    fullWidth
-                                    {...register("doseNumber")}
-                                    aria-invalid={errors.doseNumber ? "true" : "false"}
-                                />
-                                {errors.doseNumber?.message &&
-                                    <Typography>
-                                        {errors.doseNumber?.message}
-                                    </Typography>
-                                }
-                            </Grid>
-                        </Grid>
-
+                        }
                         <Grid item xs={12} sx={{ mt: 2 }}>
                             <Button
                                 variant='contained' fullWidth

@@ -1,4 +1,4 @@
-import { Grid, TextField, Typography } from '@mui/material';
+import { Grid, TextField, Toolbar, Typography } from '@mui/material';
 import { StarOutline } from '@mui/icons-material';
 
 import employees from '../../mock/employees.json';
@@ -23,13 +23,22 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { messageService } from '../../services/messageService';
 
 
 const SelectFilter = ({ config }) => {
   // const [selectedOption, setSelectedOption] = useState('');
+  const { getUsers, deleteUser } = useUserService();
 
   const handleChange = (event) => {
     config.setValue(event.target.value);
+    getUsers(event.target.value)
+      .then((data) => {
+        config.setUsers(data);
+        // setLoading(false);
+      })
+      .catch((error) => {
+      });
   };
 
   return (
@@ -59,14 +68,15 @@ export const EmployeeListView = () => {
   const [selectedRow, setSelectedRow] = useState();
   const [open, setOpen] = useState(false);
 
-  const [date, setDate] = useState();
+  const [startedDate, setStartedDate] = useState(null);
+  const [endedDate, setEndedDate] = useState(null);
   const [state, setState] = useState();
   const [type, setType] = useState();
 
 
   useEffect(() => {
     setLoading(true);
-    getUsers(type, state, date)
+    getUsers('', startedDate, endedDate)
       .then((data) => {
         setUsers(data);
         setLoading(false);
@@ -74,7 +84,7 @@ export const EmployeeListView = () => {
       .catch((error) => {
         setLoading(false);
       });
-  }, [type, state, date]);
+  }, []);
 
 
   const editRow = (row) => {
@@ -89,13 +99,31 @@ export const EmployeeListView = () => {
         setUsers(users.filter(u => u.id !== row.id));
       })
       .catch(e => {
-        console.log(e);
+        messageService.error(e);
       });
   };
 
   const selectRow = (row) => {
     setSelectedRow(row);
   }
+
+  const handleDateChange = (newValue, dateType) => {
+    const date = `${newValue.$y}-${newValue.$M + 1}-${newValue.$D}`;
+    if (dateType === 'startedDate') {
+      setStartedDate(newValue);
+      console.log('startedDatexx', startedDate);
+    } else {
+      setEndedDate(newValue);
+      console.log('endedDate', endedDate);
+    }
+    getUsers('', startedDate, endedDate)
+      .then((data) => {
+        setUsers(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   if (loading) return <div>Cargando...</div>;
 
@@ -108,38 +136,85 @@ export const EmployeeListView = () => {
           justifyContent: 'end',
           gap: 1
         }}>
+        <Toolbar>
+          <EmployeeForm employee={selectedRow}
+            open={open}
+            setOpen={setOpen}
+            setUsers={setUsers}
+            users={users}
+            setSelectedRow={setSelectedRow} />
 
-        <EmployeeForm employee={selectedRow}
-          open={open}
-          setOpen={setOpen}
-          setUsers={setUsers}
-          users={users}
-          setSelectedRow={setSelectedRow} />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              label="Fecha inicial Vacunación"
+              name="startedDate"
+              value={startedDate}
+              // onChange={(newValue) => handleDateChange(newValue, 'startedDate')}
+              onChange={(newValue) => {
+                setStartedDate(newValue)
+                getUsers('', newValue, endedDate)
+                  .then((data) => {
+                    setUsers(data);
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+              }}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              label="Fecha final Vacunación"
+              name="endedDate"
+              value={endedDate}
+              // onChange={(newValue) => handleDateChange(newValue, 'endedDate')}
+              onChange={(newValue) => {
+                setEndedDate(newValue)
+                getUsers('', startedDate, newValue)
+                  .then((data) => {
+                    setUsers(data);
+                  })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+              }}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
 
-        {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            label="Basic example"
-            value={date}
-            onChange={(newValue) => {
-              setDate(newValue);
-            }}
-            renderInput={(params) => <TextField {...params} />}
-          />
-        </LocalizationProvider> */}
-
-        <SelectFilter config={{ data: ['Vacunado', 'No vacunado'], label: 'Estado de vacunación', value: state, setValue: setState }} />
-        <SelectFilter config={{ data: ['Sputnik', 'AstraZeneca', 'Pfizer', 'Jhonson&Jhonson'], label: 'Tipo Vacuna', value: type, setValue: setType }} />
+          <SelectFilter
+            config={
+              {
+                data: ['Vacunado', 'No vacunado'],
+                label: 'Estado de vacunación',
+                value: state,
+                setValue: setState,
+                users: users,
+                setUsers: setUsers
+              }} />
+          <SelectFilter
+            config={
+              {
+                data: ['', 'Sputnik', 'AstraZeneca', 'Pfizer', 'Jhonson&Jhonson'],
+                label: 'Tipo Vacuna',
+                value: type,
+                setValue: setType,
+                users: users,
+                setUsers: setUsers
+              }} />
+        </Toolbar>
       </Box>
 
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>ID</TableCell>
             <TableCell align="right">Cédula</TableCell>
             <TableCell align="right">Nombres</TableCell>
             <TableCell align="right">Apellidos</TableCell>
             <TableCell align="right">Correo</TableCell>
-            <TableCell align="right">Está vacunado?</TableCell>
+            <TableCell align="right">Fecha de Vacunación</TableCell>
+            <TableCell align="right">Tipo de Vacuna</TableCell>
             <TableCell align="right">Acciones</TableCell>
           </TableRow>
         </TableHead>
@@ -150,14 +225,15 @@ export const EmployeeListView = () => {
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               onClick={() => selectRow(row)}
             >
-              <TableCell component="th" scope="row">
+              {/* <TableCell component="th" scope="row">
                 {row.id}
-              </TableCell>
+              </TableCell> */}
               <TableCell align="right">{row.cedula}</TableCell>
               <TableCell align="right">{row.names}</TableCell>
               <TableCell align="right">{row.lastnames}</TableCell>
               <TableCell align="right">{row.email}</TableCell>
-              <TableCell align="right">{row.isVaccinated ? 'Si' : 'No'}</TableCell>
+              <TableCell align="right">{row.vaccineDate ? row.vaccineDate : 'No Aplica'}</TableCell>
+              <TableCell align="right">{row.vaccineType ? row.vaccineType : 'No Aplica'}</TableCell>
               <TableCell align="right">
                 <EditIcon onClick={() => editRow(row)} />
                 <DeleteIcon onClick={() => deleteRow(row)} />

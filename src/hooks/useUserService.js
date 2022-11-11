@@ -7,12 +7,12 @@ export default function useUserService() {
 
     const resourceUrl = '/users';
 
-    async function getUsers(type='', state='', date='') {
+    async function getUsers(search = '', startedDate='', endedDate='') {
         const response = await instance.get(`${resourceUrl}`, {
             params: {
-                type,
-                state,
-                date
+                search,
+                startedDate,
+                endedDate
             }
         });
 

@@ -10,7 +10,7 @@ export const EmployeePage = () => {
       
       <InfoView />
       <br />
-      {/* <VaccineView /> */}
+      <VaccineView />
       
     </EmployeeLayout>
   )
