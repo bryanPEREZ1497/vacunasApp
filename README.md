@@ -1,8 +1,6 @@
-# Welcome to StackEdit!
+# Bienvenidos a Vacunas App
 
-Hi! I'm your first Markdown file in **StackEdit**. If you want to learn about StackEdit, you can read me. If you want to play with Markdown, you can edit me. Once you have finished with me, you can create new files by opening the **file explorer** on the left corner of the navigation bar.
-
-# Enlaces
+# Enlaces de interés
 |Repo|https://github.com/bryanPEREZ1497/vacunasApp |
 |--|--|
 |App | https://vacunas-k8rhxw0zs-bryanperez1497.vercel.app/ |
@@ -11,7 +9,7 @@ Hi! I'm your first Markdown file in **StackEdit**. If you want to learn about St
 
 
 
-# Ejecución
+# Proceso de Ejecución
 
 1. Ingresar a https://vacunas-k8rhxw0zs-bryanperez1497.vercel.app/ como administrador, 
 con las credenciales
@@ -21,7 +19,7 @@ con las credenciales
 3. Salir de la app y volver a entrar como empleado. Se encontrará con formularios con los campos a completar.
 
 
-# Construcción
+# Proceso de Construcción
 ## Diseño
 1. La ui fue diseñada usando UXPin
 2. El modelo fue diseñado con LucidChart. Se consideró que el empleado solo es inoculado con un solo tipo de vacuna por un número de dosis, por lo que los campos tipo, estado, fecha de vacunación, dosis están comprendidos dentro del modelo user.
